@@ -113,21 +113,32 @@ public class BookService {
             final JsonObject result = reader.readObject();
 
             Book book = new Book();
+            logger.log(Level.INFO, "book title is: " + result.getString("title"));
             book.setTitle(result.getString("title"));
 
             String description = "Not available";
-            if (result.getString("description").trim().length() > 0) {
-                description = result.getString("description");
-                logger.log(Level.INFO, "description found: " + description);
+            try {
+                if (result.getString("description").trim().length() > 0) {
+                    description = result.getString("description");
+                    logger.log(Level.INFO, "description found: " + description);
+                }
+            } catch (NullPointerException npe) {
+                logger.log(Level.INFO, "Description not available");
+                logger.log(Level.INFO, npe.toString());
             }
             book.setDescription(description);
 
             String excerpt = "Not Available";
-            String excerptFromJson = result.getJsonArray("excerpts").getJsonObject(0).getString("excerpt");
-            if (excerptFromJson.trim().length() > 0) {
-                excerpt = excerptFromJson;
-                logger.log(Level.INFO, "excerpt found: " + excerpt);
-            }
+            try {
+                String excerptFromJson = result.getJsonArray("excerpts").getJsonObject(0).getString("excerpt");
+                if (excerptFromJson.trim().length() > 0) {
+                    excerpt = excerptFromJson;
+                    logger.log(Level.INFO, "excerpt found: " + excerpt);
+                } 
+            } catch (NullPointerException npe) {
+                logger.log(Level.INFO, "Excerpt not available");
+                logger.log(Level.INFO, npe.toString());
+            }   
             book.setExcerpt(excerpt);
 
             return book;
