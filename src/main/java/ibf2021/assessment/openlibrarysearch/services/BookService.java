@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ import static ibf2021.assessment.openlibrarysearch.Constants.*;
 @Service
 public class BookService {
     private final Logger logger = Logger.getLogger(BookService.class.getName());
+
+    @Autowired
+    BookCacheService bookCacheSvc;
 
     public String search(String searchTerm) {
         String encodedSearchTerm = searchTerm.replace(" ", "+");
@@ -58,7 +62,7 @@ public class BookService {
                 JsonObject jo = jv.asJsonObject();
                 String key = jo.getString("key").replace("/works/", "");
                 String title = jo.getString("title");
-                logger.log(Level.INFO, "key: %s, title: %s".formatted(key, title));
+                // logger.log(Level.INFO, "key: %s, title: %s".formatted(key, title));
                 Book book = new Book(key, title);
                 bookList.add(book);
             }
@@ -81,17 +85,26 @@ public class BookService {
     }
 
     public String get(String worksId) {
-        String url = URL_OPENLIBARARY_BASE + "/works/" + worksId + ".json";
-        logger.log(Level.INFO, "book url is: " + url);
+        if (bookCacheSvc.hasKey(worksId)) {
+            //get from redis cache
+            logger.log(Level.INFO, "Cache hit for works id: " + worksId);
+            return bookCacheSvc.get(worksId);
+        } else {
+            //get from openlibrary api
+            String url = URL_OPENLIBARARY_BASE + "/works/" + worksId + ".json";
+            logger.log(Level.INFO, "book url is: " + url);
 
-        RestTemplate template = new RestTemplate();
-        ResponseEntity<String> resp = template.getForEntity(url, String.class);
-        if (resp.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalArgumentException("Error: status code %s".formatted(resp.getStatusCode().toString()));
+            RestTemplate template = new RestTemplate();
+            ResponseEntity<String> resp = template.getForEntity(url, String.class);
+            if (resp.getStatusCode() != HttpStatus.OK) {
+                throw new IllegalArgumentException("Error: status code %s".formatted(resp.getStatusCode().toString()));
+            }
+            String jsonDataString = resp.getBody();
+            //cache data from openlibrary api
+            bookCacheSvc.cache(worksId, jsonDataString);
+            return jsonDataString;
         }
-        String jsonDataString = resp.getBody();
-
-        return jsonDataString;
+        
     }
 
     public Book jsonToBook(String jsonDataString) {
