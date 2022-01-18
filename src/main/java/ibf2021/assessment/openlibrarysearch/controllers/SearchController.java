@@ -28,7 +28,7 @@ public class SearchController {
         model.addAttribute("searchTitle", searchTitle);        
         String jsonDataString = bookSvc.search(searchTitle);
         logger.log(Level.INFO, "search result in json: " + jsonDataString);
-        List<Book> bookListObj = bookSvc.jsonToBook(jsonDataString);
+        List<Book> bookListObj = bookSvc.jsonToBookList(jsonDataString);
         for (Book book:bookListObj) {
             logger.log(Level.INFO, "book title in booklist: " + book.getTitle());
         }

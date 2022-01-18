@@ -8,6 +8,17 @@
     <link rel="stylesheet" href="/bootstrap.min.css">
 </head>
     <body>
-        
+        <h2>Title: <span th:text="${bookObj.title}"></span></h2>
+        <h2>Description: <span th:text="${bookObj.description}"></span></h2>
+        <h2>Excerpt: <span th:text="${bookObj.excerpt}"></span></h2>
+
+        <form 
+        action="/search/main"
+        method="GET">
+                    <div class="input-group mb-3"> 
+                        <button type="submit" class="btn btn-primary">Back to Search</button>
+                    </div>
+        </form>
     </body>
+    
 </html>

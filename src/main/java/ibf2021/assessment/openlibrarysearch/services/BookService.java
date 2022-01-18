@@ -47,7 +47,7 @@ public class BookService {
         return jsonDataString;
     }
 
-    public List<Book> jsonToBook(String jsonDataString) {
+    public List<Book> jsonToBookList(String jsonDataString) {
         try (InputStream is = new ByteArrayInputStream(jsonDataString.getBytes())) {
             final JsonReader reader = Json.createReader(is);
             final JsonObject result = reader.readObject();
@@ -78,6 +78,50 @@ public class BookService {
             return new LinkedList<Book>();
         }
         
+    }
+
+    public String get(String worksId) {
+        String url = URL_OPENLIBARARY_BASE + "/works/" + worksId + ".json";
+        logger.log(Level.INFO, "book url is: " + url);
+
+        RestTemplate template = new RestTemplate();
+        ResponseEntity<String> resp = template.getForEntity(url, String.class);
+        if (resp.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("Error: status code %s".formatted(resp.getStatusCode().toString()));
+        }
+        String jsonDataString = resp.getBody();
+
+        return jsonDataString;
+    }
+
+    public Book jsonToBook(String jsonDataString) {
+        try (InputStream is = new ByteArrayInputStream(jsonDataString.getBytes())) {
+            final JsonReader reader = Json.createReader(is);
+            final JsonObject result = reader.readObject();
+
+            Book book = new Book();
+            book.setTitle(result.getString("title"));
+
+            String description = "Not available";
+            if (result.getString("description").trim().length() > 0) {
+                description = result.getString("description");
+                logger.log(Level.INFO, "description found: " + description);
+            }
+            book.setDescription(description);
+
+            String excerpt = "Not Available";
+            String excerptFromJson = result.getJsonArray("excerpts").getJsonObject(0).getString("excerpt");
+            if (excerptFromJson.trim().length() > 0) {
+                excerpt = excerptFromJson;
+                logger.log(Level.INFO, "excerpt found: " + excerpt);
+            }
+            book.setExcerpt(excerpt);
+
+            return book;
+        } catch (Exception e) {
+            logger.log(Level.INFO, e.toString());
+            return new Book();
+        }
     }
     
 }
