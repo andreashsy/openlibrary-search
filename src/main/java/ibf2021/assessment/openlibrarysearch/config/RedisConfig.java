@@ -46,7 +46,6 @@ public class RedisConfig {
             logger.log(Level.INFO, "Redis password not set!");
         }
         
-        
         final GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
         poolConfig.setMaxTotal(50);
         poolConfig.setMaxIdle(30);
@@ -66,5 +65,4 @@ public class RedisConfig {
 
         return template;
     }
-    
 }

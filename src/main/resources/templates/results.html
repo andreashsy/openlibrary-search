@@ -12,6 +12,7 @@
             <div class="row">
                 <div class="col">
                     <h1>Search result for <span th:text="${searchTitle}"></span></h1>
+                    <h3 th:if="#{lists.isEmpty(bookListObj)}">No results found</h3>
                     <ul data-th-each="book:${bookListObj}">
                         <li>
                             <a th:href="@{/book/{id}(id=${book.key})}" data-th-text="${book.title}">

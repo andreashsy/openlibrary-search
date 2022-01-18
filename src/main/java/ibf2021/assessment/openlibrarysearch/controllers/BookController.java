@@ -25,7 +25,6 @@ public class BookController {
     @GetMapping("/{worksId}")
     public String showBookInfo(@PathVariable String worksId, Model model) {
         List<String> bookJson = bookSvc.get(worksId);
-        logger.log(Level.INFO, "book json data is: " + bookJson);
         Book bookObj = bookSvc.jsonToBook(bookJson.get(1));
         if (bookJson.get(0) == "1") {
             bookObj.setCached(true);
