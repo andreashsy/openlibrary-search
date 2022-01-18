@@ -122,9 +122,9 @@ public class BookService {
                     description = result.getString("description");
                     logger.log(Level.INFO, "description found: " + description);
                 }
-            } catch (NullPointerException npe) {
+            } catch (Exception e) {
                 logger.log(Level.INFO, "Description not available");
-                logger.log(Level.INFO, npe.toString());
+                logger.log(Level.INFO, e.toString());
             }
             book.setDescription(description);
 
@@ -135,9 +135,9 @@ public class BookService {
                     excerpt = excerptFromJson;
                     logger.log(Level.INFO, "excerpt found: " + excerpt);
                 } 
-            } catch (NullPointerException npe) {
+            } catch (Exception e) {
                 logger.log(Level.INFO, "Excerpt not available");
-                logger.log(Level.INFO, npe.toString());
+                logger.log(Level.INFO, e.toString());
             }   
             book.setExcerpt(excerpt);
 
