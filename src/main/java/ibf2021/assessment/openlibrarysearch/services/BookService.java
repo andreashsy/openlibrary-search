@@ -65,17 +65,8 @@ public class BookService {
                 Book book = new Book(key, title);
                 bookList.add(book);
             }
-
             return bookList;
-            // return readings.stream()
-            //     .map(v -> (JsonObject)v)
-            //     .map(Weather::create)
-            //     .map(w -> {
-            //         w.setCity(cityName);
-            //         w.setTemp(temp);
-            //         return w;
-            //     })                    
-            //     .collect(Collectors.toList());
+
         } catch (Exception e) {
             logger.log(Level.INFO, e.toString());
             return new LinkedList<Book>();

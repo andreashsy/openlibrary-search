@@ -7,21 +7,30 @@
     <title>Book Details</title>
     <link rel="stylesheet" href="/bootstrap.min.css">
 </head>
-    <body>
-        <h2>Title: <span th:text="${bookObj.title}"></span></h2>
-        <h2>Description: <span th:text="${bookObj.description}"></span></h2>
-        <h2>Excerpt: <span th:text="${bookObj.excerpt}"></span></h2>
-        <h2>Cached: <span th:if="${bookObj.cached} == true">True</span>
-                    <span th:if="${bookObj.cached} == false">False</span>
-        </h2>
-
-        <form 
-        action="/search/main"
-        method="GET">
-                    <div class="input-group mb-3"> 
-                        <button type="submit" class="btn btn-primary">Back to Search</button>
-                    </div>
-        </form>
-    </body>
     
+
+    
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h4>Title: <span th:text="${bookObj.title}"></span></h4>
+                    <h4>Description: <span th:text="${bookObj.description}"></span></h4>
+                    <h4>Excerpt: <span th:text="${bookObj.excerpt}"></span></h4>
+                    <h4>Cached: <span th:if="${bookObj.cached} == true">True</span>
+                                <span th:if="${bookObj.cached} == false">False</span>
+                    </h4>
+                
+                    <form 
+                    action="/search/main"
+                    method="GET">
+                                <div class="input-group mb-3"> 
+                                    <button type="submit" class="btn btn-primary">Back to Search</button>
+                                </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+
 </html>

@@ -8,7 +8,6 @@ public class Book {
     private boolean cached;
 
     public Book() {
-
     }
 
     public Book(String key, String title) {
