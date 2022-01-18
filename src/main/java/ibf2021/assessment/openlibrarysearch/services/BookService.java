@@ -31,9 +31,8 @@ public class BookService {
     @Autowired
     BookCacheService bookCacheSvc;
 
-    public String search(String searchTerm) {
+    public String search(String searchTerm) {    // search using the openlibrary api and returns the json string
         String encodedSearchTerm = searchTerm.replace(" ", "+");
-        // https://openlibrary.org/search.json?q=harry%20potter&fields=docs,title,key&limit=20
         String url = UriComponentsBuilder
             .fromUriString(URL_OPENLIBARARY_BASE + "/search.json")
             .queryParam("title", encodedSearchTerm)
@@ -84,11 +83,14 @@ public class BookService {
         
     }
 
-    public String get(String worksId) {
+    public List<String> get(String worksId) {
         if (bookCacheSvc.hasKey(worksId)) {
             //get from redis cache
             logger.log(Level.INFO, "Cache hit for works id: " + worksId);
-            return bookCacheSvc.get(worksId);
+            List<String> resultList = new LinkedList<String>();
+            resultList.add("1");
+            resultList.add(bookCacheSvc.get(worksId));
+            return resultList;
         } else {
             //get from openlibrary api
             String url = URL_OPENLIBARARY_BASE + "/works/" + worksId + ".json";
@@ -102,7 +104,10 @@ public class BookService {
             String jsonDataString = resp.getBody();
             //cache data from openlibrary api
             bookCacheSvc.cache(worksId, jsonDataString);
-            return jsonDataString;
+            List<String> resultList2 = new LinkedList<String>();
+            resultList2.add("0");
+            resultList2.add(jsonDataString);
+            return resultList2;
         }
         
     }

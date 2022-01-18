@@ -11,6 +11,9 @@
         <h2>Title: <span th:text="${bookObj.title}"></span></h2>
         <h2>Description: <span th:text="${bookObj.description}"></span></h2>
         <h2>Excerpt: <span th:text="${bookObj.excerpt}"></span></h2>
+        <h2>Cached: <span th:if="${bookObj.cached} == true">True</span>
+                    <span th:if="${bookObj.cached} == false">False</span>
+        </h2>
 
         <form 
         action="/search/main"

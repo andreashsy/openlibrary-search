@@ -5,7 +5,7 @@ public class Book {
     private String key;
     private String excerpt = "Not Available";
     private String description = "Not Available";
-    private String cached;
+    private boolean cached;
 
     public Book() {
 
@@ -48,11 +48,11 @@ public class Book {
         return this.description;
     }
 
-    public void setCached(String cached) {
-        this.cached = cached;
+    public void setCached(boolean isCached) {
+        this.cached = isCached;
     }
 
-    public String getCached() {
+    public boolean isCached() {
         return this.cached;
     }
     
