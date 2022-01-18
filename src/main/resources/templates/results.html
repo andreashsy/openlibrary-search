@@ -9,6 +9,12 @@
 </head>
     <body>
         <h1>Search result for <span th:text="${searchTitle}"></span></h1>
+        <ul data-th-each="book:${bookListObj}">
+            <li>
+                <a th:href="@{/book/{id}(id=${book.key})}" data-th-text="${book.title}">
+            </li>
+        </ul>
+
         <form action="/search/main"
                     method="GET">
                         <div class="input-group mb-3"> 

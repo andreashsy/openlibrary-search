@@ -32,6 +32,7 @@ public class SearchController {
         for (Book book:bookListObj) {
             logger.log(Level.INFO, "book title in booklist: " + book.getTitle());
         }
+        model.addAttribute("bookListObj", bookListObj);
         return "results";
     }
 
