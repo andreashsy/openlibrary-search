@@ -32,8 +32,11 @@ public class BookService {
     BookCacheService bookCacheSvc;
 
     // search using the openlibrary api and returns the json string (only contains title and works id)
-    public String search(String searchTerm) {    
-        String encodedSearchTerm = searchTerm.replace(" ", "+");
+    public String search(String searchTerm) { 
+        if (searchTerm.trim().length() < 1) {
+            throw new IllegalArgumentException("Error: Invalid argument. Please search for something other than whitespace");
+        }   
+        String encodedSearchTerm = searchTerm.trim().replace(" ", "+");
         String url = UriComponentsBuilder
             .fromUriString(URL_OPENLIBARARY_BASE + "/search.json")
             .queryParam("title", encodedSearchTerm)
@@ -135,7 +138,7 @@ public class BookService {
             }   
             book.setExcerpt(excerpt);
             return book;
-            
+
         } catch (Exception e) {
             logger.log(Level.INFO, e.toString());
             return new Book();
