@@ -8,6 +8,11 @@ public class Book {
 
     }
 
+    public Book(String key, String title) {
+        this.key = key;
+        this.title = title;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }

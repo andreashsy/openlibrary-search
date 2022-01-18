@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ibf2021.assessment.openlibrarysearch.model.Book;
 import ibf2021.assessment.openlibrarysearch.services.BookService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 @Controller
@@ -23,8 +25,13 @@ public class SearchController {
 
     @GetMapping
     public String getSearchResult(@RequestParam(required=true) String searchTitle, Model model) {
-        model.addAttribute("searchTitle", searchTitle);
-        logger.log(Level.INFO, "search result in json: " + bookSvc.search(searchTitle));
+        model.addAttribute("searchTitle", searchTitle);        
+        String jsonDataString = bookSvc.search(searchTitle);
+        logger.log(Level.INFO, "search result in json: " + jsonDataString);
+        List<Book> bookListObj = bookSvc.jsonToBook(jsonDataString);
+        for (Book book:bookListObj) {
+            logger.log(Level.INFO, "book title in booklist: " + book.getTitle());
+        }
         return "results";
     }
 

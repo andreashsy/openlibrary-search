@@ -19,12 +19,13 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import jakarta.json.JsonValue;
 
 import static ibf2021.assessment.openlibrarysearch.Constants.*;
 
 @Service
 public class BookService {
-    private static final Logger logger = Logger.getLogger(BookService.class.getName());
+    private final Logger logger = Logger.getLogger(BookService.class.getName());
 
     public String search(String searchTerm) {
         String encodedSearchTerm = searchTerm.replace(" ", "+");
@@ -46,14 +47,22 @@ public class BookService {
         return jsonDataString;
     }
 
-    public static List<Book> jsonToBook(String jsonDataString) {
+    public List<Book> jsonToBook(String jsonDataString) {
         try (InputStream is = new ByteArrayInputStream(jsonDataString.getBytes())) {
             final JsonReader reader = Json.createReader(is);
             final JsonObject result = reader.readObject();
             final JsonArray readings = result.getJsonArray("docs");
 
             LinkedList<Book> bookList = new LinkedList<Book>();
-            
+            for (JsonValue jv:readings) {
+                JsonObject jo = jv.asJsonObject();
+                String key = jo.getString("key").replace("/works/", "");
+                String title = jo.getString("title");
+                logger.log(Level.INFO, "key: %s, title: %s".formatted(key, title));
+                Book book = new Book(key, title);
+                bookList.add(book);
+            }
+
             return bookList;
             // return readings.stream()
             //     .map(v -> (JsonObject)v)
