@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Result</title>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+</head>
+    <body>
+        <h1>Search result for <span th:text="${searchTitle}"></span></h1>
+        <form action="/search/main"
+                    method="GET">
+                        <div class="input-group mb-3"> 
+                            <button type="submit" class="btn btn-primary">Back to Search</button>
+                        </div>
+                    </form>
+        
+    </body>
+</html>
